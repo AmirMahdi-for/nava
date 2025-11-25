@@ -1,20 +1,27 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, func
-from sqlalchemy.orm import declarative_base
+from sqlalchemy import (
+    Column, Integer, String, ForeignKey, Enum, Text, DateTime
+)
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
+from .base import Base
+import enum
 
-Base = declarative_base()
-
-class Conversation(Base):
-    __tablename__ = "conversations"
-    id = Column(Integer, primary_key=True)
-    session_id = Column(String, unique=True, index=True)
-    started_at = Column(DateTime(timezone=True), server_default=func.now())
+class MessageFromEnum(str, enum.Enum):
+    server = "server"
+    client = "client"
 
 class Message(Base):
     __tablename__ = "messages"
-    id = Column(Integer, primary_key=True)
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
     conversation_id = Column(Integer, ForeignKey("conversations.id"))
-    role = Column(String(20))  # user or assistant
-    text_content = Column(Text)
-    audio_path = Column(String, nullable=True)  # فقط برای کاربر
-    duration_seconds = Column(Integer, nullable=True)
+    audio_url = Column(String(255))
+    text = Column(Text, nullable=True)
+    from_user = Column(Enum(MessageFromEnum))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+    conversation = relationship("Conversation", back_populates="messages")
+    model_requests = relationship("ModelRequest", back_populates="message")
+    audio_file = relationship("AudioFile", back_populates="message", uselist=False)
