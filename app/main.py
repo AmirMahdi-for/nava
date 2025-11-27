@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.core.config import settings
 from app.core.logging import logger
 from app.api.v1.websocket import router as ws_router
+from app.api.v1.auth import router as auth_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -10,6 +11,7 @@ app = FastAPI(
 )
 
 app.include_router(ws_router, prefix="/api/v1")
+app.include_router(auth_router, prefix="/api/v1/auth")
 
 @app.on_event("startup")
 async def startup_event():

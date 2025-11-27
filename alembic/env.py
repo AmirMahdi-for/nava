@@ -2,7 +2,6 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 
-# Import Base from the models package, which loads all models via __init__.py
 from app.models import Base
 
 config = context.config
@@ -18,7 +17,7 @@ def run_migrations_offline():
         context.run_migrations()
 
 def run_migrations_online():
-    # استفاده از sync engine برای Alembic
+
     connectable = engine_from_config(
         config.get_section(config.config_ini_section),
         prefix="sqlalchemy.",

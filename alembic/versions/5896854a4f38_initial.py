@@ -1,8 +1,8 @@
-"""Initial voice assistant tables
+"""initial
 
-Revision ID: db4b49429365
+Revision ID: 5896854a4f38
 Revises: 
-Create Date: 2025-11-25 21:56:24.456174
+Create Date: 2025-11-27 14:02:01.483507
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'db4b49429365'
+revision: str = '5896854a4f38'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
