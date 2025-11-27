@@ -16,6 +16,8 @@ Nava is designed for ultra-low-latency voice communication powered by OpenAI.
 - 🔈 **Text-to-Speech output (mp3)**
 - 📡 **Chunked binary audio streaming support**
 - 📝 Centralized structured logging with Loguru
+- 🔐 **JWT-based user authentication**
+- 🐘 **PostgreSQL database support**
 - 🔧 Fully Dockerized (Dockerfile included)
 
 ---
@@ -27,6 +29,7 @@ Nava is designed for ultra-low-latency voice communication powered by OpenAI.
 - **OpenAI SDK**
 - **SQLAlchemy (async) + Alembic**
 - **Loguru**
+- **PostgreSQL**
 - **Docker**
 
 ---
@@ -41,6 +44,10 @@ PROJECT_NAME=nava
 VERSION=0.1.0
 WEBSOCKET_MAX_SIZE=10000000
 LOG_LEVEL=DEBUG
+SECRET_KEY=your-secret-key
+DATABASE_URL=database_url
+ACCESS_TOKEN_EXPIRE_MINUTES=43200
+JWT_ALGORITHM=HS256
 ```
 
 ---
@@ -53,6 +60,11 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 pip install -r requirements.txt
+
+alembic revision --autogenerate -m "Initial voice assistant tables"
+alembic upgrade head
+
+python -m app.cli.create_user --username admin --password 123456
 
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
@@ -94,7 +106,6 @@ cat hello.wav | websocat -b --no-close \
 
 ```
 logs/app.log
-
 ```
 
 ---
